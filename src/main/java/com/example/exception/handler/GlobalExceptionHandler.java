@@ -1,9 +1,6 @@
 package com.example.exception.handler;
 
-import com.example.exception.exception.ListUsersIsEmptyException;
-import com.example.exception.exception.NotValidFieldException;
-import com.example.exception.exception.OtherException;
-import com.example.exception.exception.UserNotFoundException;
+import com.example.exception.exception.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

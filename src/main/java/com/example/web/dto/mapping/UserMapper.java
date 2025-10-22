@@ -1,6 +1,6 @@
 package com.example.web.dto.mapping;
 
-import com.example.business.model.User;
+import com.example.model.User;
 import com.example.web.dto.UserDto;
 import org.mapstruct.Mapper;
 

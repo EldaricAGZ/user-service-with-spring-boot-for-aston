@@ -1,7 +1,8 @@
-package com.example.business.service;
+package com.example.service;
 
-import com.example.business.model.User;
-import com.example.business.repository.UserRepository;
+import com.example.kafka.KafkaProducer;
+import com.example.model.User;
+import com.example.repository.UserRepository;
 import com.example.exception.exception.ListUsersIsEmptyException;
 import com.example.exception.exception.UserNotFoundException;
 import com.example.web.dto.UserDto;
@@ -23,11 +24,13 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final KafkaProducer kafkaProducer;
 
     @Autowired
-    public UserService(UserRepository userRepository, UserMapper userMapper) {
+    public UserService(UserRepository userRepository, UserMapper userMapper, KafkaProducer kafkaProducer) {
         this.userRepository = userRepository;
         this.userMapper = userMapper;
+        this.kafkaProducer = kafkaProducer;
     }
 
     @Transactional
@@ -35,7 +38,9 @@ public class UserService {
         User entity = userMapper.toEntity(userDto);
         User savedUser = userRepository.save(entity);
         logger.debug("Created user: {}", entity);
-        return savedUser.getId().toString();
+        UUID userId = savedUser.getId();
+        kafkaProducer.sendMessage("создан", savedUser.getEmail());
+        return userId.toString();
     }
 
     @Transactional
@@ -74,7 +79,9 @@ public class UserService {
         newUser.setAge(updatedUser.getAge());
         logger.debug("Return user after updated: {}", newUser);
 
-        return userRepository.save(newUser).getId().toString();
+        User result = userRepository.save(newUser);
+        kafkaProducer.sendMessage("обновлен", result.getEmail());
+        return result.getId().toString();
     }
 
     @Transactional
@@ -87,6 +94,8 @@ public class UserService {
         logger.debug("Get users for deleted: {}", deletedUser);
 
         userRepository.delete(deletedUser);
+
+        kafkaProducer.sendMessage("удален", deletedUser.getEmail());
     }
 
 }

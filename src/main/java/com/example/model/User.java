@@ -1,4 +1,4 @@
-package com.example.business.model;
+package com.example.model;
 
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;

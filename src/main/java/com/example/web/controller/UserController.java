@@ -1,6 +1,6 @@
 package com.example.web.controller;
 
-import com.example.business.service.UserService;
+import com.example.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

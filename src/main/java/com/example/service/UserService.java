@@ -39,7 +39,7 @@ public class UserService {
         User savedUser = userRepository.save(entity);
         logger.debug("Created user: {}", entity);
         UUID userId = savedUser.getId();
-        kafkaProducer.sendMessage("создан", savedUser.getEmail());
+        kafkaProducer.sendMessage("создан.", savedUser.getEmail());
         return userId.toString();
     }
 
@@ -80,7 +80,7 @@ public class UserService {
         logger.debug("Return user after updated: {}", newUser);
 
         User result = userRepository.save(newUser);
-        kafkaProducer.sendMessage("обновлен", result.getEmail());
+        kafkaProducer.sendMessage("обновлен.", result.getEmail());
         return result.getId().toString();
     }
 
@@ -95,7 +95,7 @@ public class UserService {
 
         userRepository.delete(deletedUser);
 
-        kafkaProducer.sendMessage("удален", deletedUser.getEmail());
+        kafkaProducer.sendMessage("удален.", deletedUser.getEmail());
     }
 
 }
